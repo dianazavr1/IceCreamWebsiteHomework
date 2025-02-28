@@ -9,8 +9,12 @@ public class CartItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
-    private int price;
+    @ManyToOne
+    @JoinColumn(name = "item_id", nullable = false)
+
+    private ProductEntity product;
+
+    private int quantity = 1;
 
     @Version
     private Integer version;
@@ -22,20 +26,20 @@ public class CartItem {
     public void setId(Long id) {
         this.id = id;
     }
-
-    public String getName() {
-        return name;
+    public ProductEntity getProduct() {
+        return product;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setProduct(ProductEntity product) {
+        this.product = product;
     }
 
-    public int getPrice() {
-        return price;
-    }
 
-    public void setPrice(int price) {
-        this.price = price;
+
+    public int getQuantity(){
+        return quantity;
+    }
+    public void setQuantity(int quantity){
+        this.quantity = quantity;
     }
 }

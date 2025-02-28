@@ -1,9 +1,8 @@
 package com.example.homeworkwebsitebd.controller;
 
-import com.example.homeworkwebsitebd.dto.CartRequest;
+import com.example.homeworkwebsitebd.dto.CartItemRequest;
 import com.example.homeworkwebsitebd.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,27 +26,20 @@ public class CartController {
         return "cart"; // Имя Thymeleaf-шаблона (cart.html)
     }
 
-//    @PostMapping(value = "/add", consumes = "application/json")
-//    public ResponseEntity<String> addToCart(@RequestBody Map<String, Long> request) {
-//        Long itemId = request.get("itemId");
-//        if (itemId == null) {
-//            return ResponseEntity.badRequest().body("Ошибка: itemId не передан");
-//        }
-//        cartService.addToCart(itemId);
-//        return ResponseEntity.ok("Товар добавлен в корзину");
-//    }
-@PostMapping(value = "/add", consumes = "application/json")
-public ResponseEntity<String> addToCart(@RequestBody CartRequest request) {
-    Long itemId = request.getItemId();
-    if (itemId == null) {
-        return ResponseEntity.badRequest().body("Ошибка: itemId не передан");
+    @PostMapping("/add")
+    public ResponseEntity<String> addToCart(@RequestBody Map<String, Object> request) {
+        System.out.println("Полученные данные: " + request);
+
+        Object itemId = request.get("itemId");
+        Object quantity = request.get("quantity");
+
+        if (itemId == null || quantity == null) {
+            return ResponseEntity.badRequest().body("Ошибка: itemId или quantity не переданы");
+        }
+
+        cartService.addToCart(Long.parseLong(itemId.toString()), Integer.parseInt(quantity.toString()));
+        return ResponseEntity.ok("Товар добавлен");
     }
-    cartService.addToCart(itemId);
-    return ResponseEntity.ok("Товар добавлен в корзину");
-}
-
-
-
 
 
     @PostMapping("/remove")
